@@ -3,16 +3,43 @@ function Juego(){
 	this.usuarios={}; //array asociativo
 
 	this.agregarUsuario=function(nick){
+		let res={nick:-1};
 		if (!this.usuarios[nick]){
-			this.usuarios[nick]=new Usuario(nick, this)
+			this.usuarios[nick]=new Usuario(nick, this);
+			res={nick:nick};
+			console.log("Nuevo usuario: "+nick)
 		}
+		return res;
 	}
 	this.eliminarUsuario=function(nick){
 		delete this.usuarios[nick];
 	}
+
+	this.jugadorCreaPartida=function(nick){
+	let usr = this.usuarios[nick]; //juego.obtenerUsuario(nick)
+	let res={codigo:-1};
+	if (usr){
+		//let codigo=usr.crearPartida();
+		let codigo=this.crearPartida(usr);
+		res={codigo:codigo};
+	}
+		return res;
+	}
+this.jugadorSeUneAPartida=function(nick,codigo){
+	let usr = this.usuarios[nick]; //juego.obtenerUsuario(nick)
+	let res={"codigo":-1};
+	if (usr){
+		//let valor=usr.unirseAPartida(codigo);
+		let valor=this.unirseAPartida(codigo,usr);
+		res={"codigo":valor};
+	}
+		return res;
+}
+
 	this.crearPartida=function(usr){
 		let codigo=Date.now();
 		this.partidas[codigo]=new Partida(codigo, usr);
+		console.log("Usuario "+usr.nick+" crea partida "+codigo);
 		return codigo;
 	}
 	this.unirseAPartida=function(codigo,usr){
@@ -26,7 +53,7 @@ function Juego(){
 	this.obtenerPartidas=function(){
 		let lista=[];
 		for (let key in this.partidas){
-			lista.push({"codigo":key, "owner":this.partidas[codigo].owner})
+			lista.push({"codigo":key, "owner":this.partidas[key].owner.nick})
 		}
 		return lista;
 	}
@@ -34,8 +61,8 @@ function Juego(){
 		//devolver solo las partidas que no estén completas en cuanto a jugadores
 		let lista=[];
 		for (let key in this.partidas){
-			if(key.jugadores.length<2){
-				lista.push({"codigo":key, "owner":this.partidas[codigo].owner})
+			if(this.partidas[key].hayHueco()){
+				lista.push({"codigo":key, "owner":this.partidas[key].owner.nick})
 			}
 		}
 		return lista;
@@ -58,16 +85,24 @@ function Partida(codigo, usr){
 	this.owner=usr;
 	this.jugadores=[];
 	this.fase="Inicial";	//new Inicial();
-	//this.maxJugadores=2;
+	this.maxJugadores=2;
 	this.agregarJugador=function(usr){
+		let res=this.codigo;
 		if (this.jugadores.length<2){
 			this.jugadores.push(usr);
+			console.log("El usuario "+usr.nick+" se une a la partida "+codigo);
 			}else{
-			console.log("La partida está completa");
+				res=-1;
+				console.log("La partida está completa");
 		}
+		return res;
 	}
 
+	this.hayHueco=function(){
+		return (this.maxJugadores<2);
+	}
 	this.agregarJugador(this.owner);
 
 }
 
+module.exports.Juego = Juego;

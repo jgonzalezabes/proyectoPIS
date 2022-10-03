@@ -17,7 +17,7 @@ describe("El juego...", function() {
     expect(urs2.nick).toEqual("luis");
   });
 
-  it("crear partida", function() {
+  xit("crear partida", function() {
     let codigo=usr1.crearPartida();
     expect(miJuego.partidas[codigo]).toBeDefined();
     let partida=miJuego.partidas[codigo];
@@ -26,7 +26,7 @@ describe("El juego...", function() {
     expect(partida.codigo).toEqual(codigo); //antes ponia partidas, le he borrado la "s"
   });
 
-  it("el usuario luis se une a la partida", function(){
+  xit("el usuario luis se une a la partida", function(){
     let codigo=usr1.crearPartida();
     let partida=miJuego.partidas[codigo];
     usr2.unirseAPartida();
