@@ -25,16 +25,16 @@ function Juego(){
 	}
 		return res;
 	}
-this.jugadorSeUneAPartida=function(nick,codigo){
-	let usr = this.usuarios[nick]; //juego.obtenerUsuario(nick)
-	let res={"codigo":-1};
-	if (usr){
-		//let valor=usr.unirseAPartida(codigo);
-		let valor=this.unirseAPartida(codigo,usr);
-		res={"codigo":valor};
+	this.jugadorSeUneAPartida=function(nick,codigo){
+		let usr = this.usuarios[nick]; //juego.obtenerUsuario(nick)
+		let res={"codigo":-1};
+		if (usr){
+			//let valor=usr.unirseAPartida(codigo);
+			let valor=this.unirseAPartida(codigo,usr);
+			res={"codigo":valor};
+		}
+			return res;
 	}
-		return res;
-}
 
 	this.crearPartida=function(usr){
 		let codigo=Date.now();
@@ -88,7 +88,7 @@ function Partida(codigo, usr){
 	this.maxJugadores=2;
 	this.agregarJugador=function(usr){
 		let res=this.codigo;
-		if (this.jugadores.length<2){
+		if (this.hayHueco()){
 			this.jugadores.push(usr);
 			console.log("El usuario "+usr.nick+" se une a la partida "+codigo);
 			}else{
