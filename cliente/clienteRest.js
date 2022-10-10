@@ -10,11 +10,13 @@ function ClienteRest(){
 				cli.nick=data.nick;
 				//$.cookie("nick",ws.nick);
 				//iu.mostrarHome(data);
+
+				iu.mostarHome();
 			}
 			else{
 				console.log("No se ha podido registrar el usuario");
 				//iu.mostrarModal("El nick ya está en uso");
-				//iu.mostrarAgregarJugador();
+				iu.mostrarAgregarUsuario();
 			}
 		});
 	}
