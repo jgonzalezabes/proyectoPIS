@@ -10,7 +10,7 @@ function ClienteRest(){
 				cli.nick=data.nick;
 				//$.cookie("nick",ws.nick);
 				//iu.mostrarHome(data);
-
+				cli.obtenerListaPartidas();
 				iu.mostarHome();
 			}
 			else{
@@ -22,12 +22,15 @@ function ClienteRest(){
 	}
 		//en este punto todavía no estoy seguro de que haya contestado el servidor
 		//lo que pongamos aqui se ejecuta a la vez que la llamada
-	this.crearPartida=function(nick){
+	this.crearPartida=function(){
 		let cli=this;
+		let nick=cli.nick;
 		$.getJSON("/crearPartida/"+nick,function(data){
 			console.log(data);
 			if (data.codigo!=-1){
-				console.log("Usuario "+cli.nick+" crea partida co");
+				console.log("Usuario "+nick+" crea partida codigo: "+data.codigo);
+				iu.mostrarCodigo(data.codigo);
+
 			}
 			else{
 				console.log("No se ha podido crear partida");
@@ -45,6 +48,12 @@ function ClienteRest(){
 			else{
 				console.log("No se ha podido unir a la partida");
 			}			
+		});
+	}
+	this.obtenerListaPartidas=function(){
+		let cli=this;
+		$.getJSON("/obtenerPartidas",function(lista){
+			iu.mostrarListaDePartidas(lista);			
 		});
 	}
 

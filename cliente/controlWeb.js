@@ -1,7 +1,8 @@
 function ControlWeb(){
 	this.mostrarAgregarUsuario=function(){
 		var cadena= '<div class="row" id="mAU">';//'<form class="form-row needs-validation"  id="mAU">';
-		cadena=cadena+'<div class="row"><h2>El juego indefinido</h2></div>';
+		cadena=cadena+'<div class="col">';
+		cadena=cadena+'<div class="row"><div class="col"><h2>El juego indefinido</h2></div></div>';
 		cadena=cadena+'<div class="row">';
 		cadena=cadena+'<div class="col">'
         cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick (max 6 letras)" required></div>';
@@ -29,17 +30,43 @@ function ControlWeb(){
 	}
 	this.mostarHome=function(){
 		$('mH').remove();
-		var cadena= '<div id="mH">'
+		var cadena= '<div class="row" id="mH">'
+		cadena=cadena+'<div class="col">';
 		cadena=cadena+"<p>Bienvenido "+rest.nick+" </p>";
-		cadena=cadena+'</div>';
-		$("#agregarUsuario").append(cadena);     
+		cadena=cadena+"<div id='codigo'></div>"
+		cadena=cadena+'</div></div>';
+		$("#agregarUsuario").append(cadena);    
+		this.mostrarCrearPartida(); 
 	}
 	this.mostrarCrearPartida=function(){
-	//dibujar un boton que al hacer click llame a crear partida de rest	
-	//partida de rest
+		$('mCP').remove();
+		var cadena= '<div class="row" id="mCP">';//'<form class="form-row needs-validation"  id="mAU">';
+		cadena=cadena+'<div class="col">';
+        cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear Partida</button>';
+        cadena=cadena+'</div></div>'; //' </form>';
+        $('#crearPartida').append(cadena);
+        $("#btnCP").on("click",function(e){
+			$("#mCP").remove();
+			//$("#aviso").remove();
+			rest.crearPartida();
+		})
 	}
-	this.mostrarListaDePartidas=function(){
-		//crear un control visual tipo lista (tabla, dropdown o algo asi)
+	this.mostrarCodigo=function(codigo){
+		let cadena="Codigo de la partida: "+codigo;
+		$('#codigo').append(codigo);
+	}
+	this.mostrarListaDePartidas=function(lista){ //no funciona este método (hace que se rompa todo)
+		//crear un control visual tipo lista (tabla, dropdown o algo asi) para mostrar
+		// la lista de partidas y permitir unirse
+		let cadena='<div id="mLP">';
+		cadena=cadena+'<ul class="list-group">';
+		for(i=0;i<lista.length;i++){
+			cadena=cadena+'<li class="list-group-item">'+lista[i].codigo+'</li>';
+		}
+		cadena=cadena+"</ul>";
+		cadena=cadena+"</div>";
+		$('#listaPartidas').append(cadena);
+
 	}
 
 }
