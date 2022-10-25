@@ -2,7 +2,7 @@ function ClienteRest(){
 	this.nick;	
 	this.agregarUsuario=function(nick){
 		let cli=this;
-		$.getJSON("/agregarUsuario/"+nick,function(data){
+		$.getJSON("/agregarUsuario/"+nick,function(data){ //una funcion de callback es una función anónima (no tiene nombre) que se ejecuta cuando responde el servidor
 			//se ejecuta cuando conteste el servidor
 			console.log(data);
 			if (data.nick!=-1){
@@ -10,6 +10,7 @@ function ClienteRest(){
 				cli.nick=data.nick;
 				//ws.nick=data.nick;
 				$.cookie("nick",data.nick);
+				cws.conectar();
 				iu.mostrarHome();//iu.mostrarHome(data.nick)
 			}
 			else{
@@ -19,10 +20,10 @@ function ClienteRest(){
 			}
 		});
 	}
-	this.crearPartida=function(){
+	this.crearPartida=function(){ //encapsula el getjson
 		let cli=this;
 		let nick=cli.nick;
-		$.getJSON("/crearPartida/"+nick,function(data){
+		$.getJSON("/crearPartida/"+nick,function(data){ 
 			console.log(data);
 			if (data.codigo!=-1){
 				console.log("Usuario "+nick+" crea partida codigo: "+data.codigo)
@@ -71,5 +72,12 @@ function ClienteRest(){
 			console.log(lista);
 			iu.mostrarListaDePartidasDisponibles(lista);
 		});
+	}
+	this.usuarioSale=function(){
+		let nick=this.nick;
+		$.getJSON("/salir/"+nick,function(){
+			$.removeCookie("nick");
+			iu.comprobarCookie();
+		})
 	}
 }
