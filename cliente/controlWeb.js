@@ -2,6 +2,7 @@ function ControlWeb(){
 	this.comprobarCookie=function(){
 		if ($.cookie("nick")){
 			rest.nick=$.cookie("nick");
+			cws.conectar();
 			this.mostrarHome();
 		}
 		else{
@@ -46,6 +47,7 @@ function ControlWeb(){
 		cadena=cadena+"<p>Bienvenido "+rest.nick+"</p>";
 		cadena=cadena+'<button id="btnSalir" class="btn btn-primary mb-2 mr-sm-2">Salir</button>';
 		cadena=cadena+"<div id='codigo'></div>"
+		//cadena=cadena+"<button id='btnAbandonar' class='btn btn-primary mb-2 mr-sm-20>Abandonar Partida</button>'";
 		cadena=cadena+"</div></div>";
 		$('#agregarUsuario').append(cadena);
 		this.mostrarCrearPartida();
@@ -59,6 +61,9 @@ function ControlWeb(){
 			//$.removeCookie("nick");
 			//iu.comprobarCookie();
 		});
+		//$("#btnAbandonar").on("click", function(e){
+
+		//})
 	}
 	this.mostrarCrearPartida=function(){
 		$('#mCP').remove();
@@ -117,10 +122,13 @@ function ControlWeb(){
 			rest.obtenerListaPartidasDisponibles();
 		})
 	}
-	this.mostrarModal=function(msg){
+	this.mostrarModal=function(msg){ //el modal e un mensaje que se muestra por pantalla
 		$('#mM').remove();
 		var cadena="<p id='mM'>"+msg+"</p>";
 		$('#contenidoModal').append(cadena);
 		$('#miModal').modal("show");
 	}
+	//this.abandonarPartida=function(msg){
+	//	let cadena
+	//}
 }
