@@ -1,7 +1,7 @@
 function ServidorWS(){
 
 	//enviar peticiones
-	this.enviarAlRemitente=function(socket,mensaje,datos){
+	this.enviarAlRemitente=function(socket,mensaje,datos){ //a la persona que le ha enviado un socket al servidor
 		socket.emit(mensaje,datos);
 	}
 	this.enviarATodosEnPartida=function(io,codigo,mensaje,datos){
@@ -35,20 +35,48 @@ function ServidorWS(){
 			cli.enviarAlRemitente(socket,"unionAPartida", res);
 		  	//comprobar que la partida puede comenzar (fase jugando de la partida)
 		  	let partida=juego.obtenerPartida(codigo);
-		  	if (partida.esJugando()){
-		  		cli.enviarATodosEnPartida(io,codigo,"aJugar",{});
-		  	}
+		  	cli.enviarATodosEnPartida(io,codigo,"aColocar",{});
+		  	
 		  });
-		 /* socket.on("abandonarPartida",function(){
+		  /*socket.on("abandonarPartida",function(){ //también debemos mostrar un modal al otro jugador diciéndole que el jugador "nick" ha abandonado la partida y elminar la partida
 		  	juego.juegoAbandona(nick,codigo);
 		  	cli.enviarATodosEnPartida(io,codigo,"jugadorAbandona",{
-		  		//socket.leave(codigo.toString());
+		  		socket.leave(codigo.toString());
 		  	});
 		  });*/
-		  //socket.on("aJugar",function(){
-
-		  //})
+		  socket.on("colocarBarco",function(nick,nombre,x,y){
+		  	let us = juego.obtenerUsuario(nick);
+		  	if(us){
+		  		us.colocarBarco(nombre,x,y);
+		  		barco=us.obtenerEstado(x,y);
+		  		cli.enviarAlRemitente(socket,"barcoColocado", barco);
+		  	}
+		  });
+		  socket.on("barcosDesplegados",function(nick){
+		  	let us = juego.obtenerUsuario(nick);
+		  	if(us){
+		  		us.barcosDesplegados();
+		  		if(us.partida.esJugando()){
+		  			let codigo=us.partida.codigo.toString();
+		  			cli.enviarATodosEnPartida(io,codigo,"aJugar",{});
+		  		}
+		  	}
+		  });
+		  socket.on("disparar",function(nick,x,y){
+		  	let us = juego.obtenerUsuario(nick);
+		  	if(us){
+		  		let codigo=us.partida.codigo.toString();
+		  		us.disparar(x,y);
+		  		casillaDisparada=us.obtenerEstado(x,y);
+		  		if(us.partida.esFinal()){
+		  			cli.enviarATodosEnPartida(io,codigo,"finPartida",{});
+		  		}else{
+		  			cli.enviarATodosEnPartida(io,codigo,"casillaDisparada",casillaDisparada);
+		  		}
+		  	}
+		  })
 		});
+
 	}
 }
 

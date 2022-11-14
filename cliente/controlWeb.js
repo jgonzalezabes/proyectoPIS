@@ -47,7 +47,7 @@ function ControlWeb(){
 		cadena=cadena+"<p>Bienvenido "+rest.nick+"</p>";
 		cadena=cadena+'<button id="btnSalir" class="btn btn-primary mb-2 mr-sm-2">Salir</button>';
 		cadena=cadena+"<div id='codigo'></div>"
-		//cadena=cadena+"<button id='btnAbandonar' class='btn btn-primary mb-2 mr-sm-20>Abandonar Partida</button>'";
+		cadena=cadena+"<button id='btnAbandonar' class='btn btn-primary mb-2 mr-sm-20'>Abandonar Partida</button>";
 		cadena=cadena+"</div></div>";
 		$('#agregarUsuario').append(cadena);
 		this.mostrarCrearPartida();
@@ -61,9 +61,9 @@ function ControlWeb(){
 			//$.removeCookie("nick");
 			//iu.comprobarCookie();
 		});
-		//$("#btnAbandonar").on("click", function(e){
-
-		//})
+		$("#btnAbandonar").on("click", function(e){
+			cws.abandonarPartida();
+		});
 	}
 	this.mostrarCrearPartida=function(){
 		$('#mCP').remove();
@@ -76,14 +76,14 @@ function ControlWeb(){
         $("#btnCP").on("click",function(e){		
 			$("#mCP").remove();
 			$('#mLP').remove();
-			cws.crearPartida();
+			cws.crearPartida(); //Aquí empieza el ciclo de los web Sockets. Se llama a clienteWS
 		});
 	}
-	this.mostrarCodigo=function(codigo){
+	this.mostrarCodigo=function(codigo){//muestra el codigo de la partida
 		let cadena="Código de la partida: "+codigo;
 		$('#codigo').append(cadena);
 	}
-	this.mostrarListaDePartidas=function(lista){
+	/*this.mostrarListaDePartidas=function(lista){
 		$('#mLP').remove();
 		let cadena="<div id='mLP'>";		
 		cadena=cadena+'<ul class="list-group">';
@@ -94,7 +94,7 @@ function ControlWeb(){
 		cadena=cadena+"</div>"
 		$('#listaPartidas').append(cadena);
 		
-	}
+	}*/
 	this.mostrarListaDePartidasDisponibles=function(lista){
 		$('#mLP').remove();
 		let cadena="<div class='row' id='mLP'>";
@@ -116,6 +116,7 @@ function ControlWeb(){
 	            $('#mLP').remove();
 	            $('#mCP').remove();
 	            cws.unirseAPartida(codigo);
+	            //puede que aqui haya que poner una nueva cadena con el boton abandonar partida
 	        }
 	    });		
 	    $("#btnAL").on("click",function(e){		

@@ -115,7 +115,7 @@ function Usuario(nick,juego){
 	}
 	this.colocarBarco=function(nombre,x,y){
 		//comprobar fase
-		if (this.partida.fase=="desplegando"){
+		if (this.partida && this.partida.fase=="desplegando"){//poner otro && que te diga que si una barco esté desplegado no te deje colocarlo
 			let barco=this.flota[nombre];
 			this.tableroPropio.colocarBarco(barco,x,y);
 		}
@@ -199,6 +199,9 @@ function Partida(codigo,usr){
 	}
 	this.esDesplegando=function(){
 		return this.fase=="desplegando";
+	}
+	this.esFinal=function(){
+		return this.fase=="final";
 	}
 	this.flotasDesplegadas=function(){
 		for(i=0;i<this.jugadores.length;i++){
