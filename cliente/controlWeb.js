@@ -2,8 +2,9 @@ function ControlWeb(){
 	this.comprobarCookie=function(){
 		if ($.cookie("nick")){
 			rest.nick=$.cookie("nick");
-			cws.conectar();
-			this.mostrarHome();
+			rest.comprobarUsuario();
+			//cws.conectar();
+			//this.mostrarHome();
 		}
 		else{
 			this.mostrarAgregarUsuario();

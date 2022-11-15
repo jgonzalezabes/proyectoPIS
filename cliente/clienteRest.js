@@ -20,6 +20,27 @@ function ClienteRest(){
 			}
 		});
 	}
+	this.comprobarUsuario=function(){
+		let cli=this;
+		$.getJSON("/comprobarUsuario/"+this.nick,function(data){
+			console.log(data);
+			if (data.nick!=-1){
+				console.log("Usuario "+data.nick+" activo")
+				//cli.nick=data.nick;
+				//ws.nick=data.nick;
+				//$.cookie("nick",data.nick);
+				cws.conectar();
+				iu.mostrarHome();//iu.mostrarHome(data.nick)
+			}
+			else{
+				console.log("El usuario no está activo");
+				//iu.mostrarModal("El nick ya está en uso");
+				iu.mostrarAgregarUsuario();
+			}
+		});
+	}
+
+
 	this.crearPartida=function(){ //encapsula el getjson
 		let cli=this;
 		let nick=cli.nick;

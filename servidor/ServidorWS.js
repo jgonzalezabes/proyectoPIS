@@ -66,12 +66,17 @@ function ServidorWS(){
 		  	let us = juego.obtenerUsuario(nick);
 		  	if(us){
 		  		let codigo=us.partida.codigo.toString();
-		  		us.disparar(x,y);
-		  		casillaDisparada=us.obtenerEstado(x,y);
-		  		if(us.partida.esFinal()){
-		  			cli.enviarATodosEnPartida(io,codigo,"finPartida",{});
+		  		let rival = us.partida.obtenerRival(nick);
+		  		if(us.partida.turno == us){
+		  			us.disparar(x,y);
+		  			casillaDisparada=rival.obtenerEstado(x,y);
+		  			if(us.partida.esFinal()){
+		  				cli.enviarATodosEnPartida(io,codigo,"finPartida",{});
+		  			}else{
+		  				cli.enviarATodosEnPartida(io,codigo,"casillaDisparada",casillaDisparada);
+		  			}
 		  		}else{
-		  			cli.enviarATodosEnPartida(io,codigo,"casillaDisparada",casillaDisparada);
+		  			cli.enviarAlRemitente(socket,"turnoIncorrecto",{});
 		  		}
 		  	}
 		  })

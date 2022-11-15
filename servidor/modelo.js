@@ -129,13 +129,17 @@ function Usuario(nick,juego){
 		return true;
 	}
 	this.barcosDesplegados=function(){
+		if(this.partida && this.partida.esDesplegando()){
 		this.partida.barcosDesplegados();
+		}
 	}
 	this.disparar=function(x,y){
-		this.partida.disparar(this.nick,x,y);
+		if(x<=this.tableroPropio.size && y<=this.tableroPropio.size && x>=0 && y>=0){
+			this.partida.disparar(this.nick,x,y);
+		}
 	}
 	this.meDisparan=function(x,y){
-		this.tableroPropio.meDisparan(x,y);
+		return this.tableroPropio.meDisparan(x,y);
 	}
 	this.obtenerEstado=function(x,y){
 		return this.tableroPropio.obtenerEstado(x,y);
@@ -245,8 +249,8 @@ function Partida(codigo,usr){
 		let atacante=this.obtenerJugador(nick);
 		if (this.turno.nick==atacante.nick){
 			let atacado=this.obtenerRival(nick);
-			atacado.meDisparan(x,y);
-			let estado=atacado.obtenerEstado(x,y);
+			let estado=atacado.meDisparan(x,y);
+			//let estado=atacado.obtenerEstado(x,y);
 			atacante.marcarEstado(estado,x,y);
 			this.comprobarFin(atacado);
 		}	
@@ -293,8 +297,11 @@ function Tablero(size){
 		}
 		return true;
 	}
+	this.ponerAgua=function(x,y){
+		this.casillas[x][y].contiene=new Agua();
+	}
 	this.meDisparan=function(x,y){
-		this.casillas[x][y].contiene.meDisparan();
+		return this.casillas[x][y].contiene.meDisparan(this,x,y);
 	}
 	this.obtenerEstado=function(x,y){
 		return this.casillas[x][y].contiene.obtenerEstado();
@@ -324,7 +331,7 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
 	this.esAgua=function(){
 		return false;
 	}
-	this.meDisparan=function(){
+	this.meDisparan=function(tablero,x,y){
 		this.disparos++;
 		if (this.disparos<this.tam){
 			this.estado="tocado";
@@ -334,22 +341,32 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
 			this.estado="hundido";
 			console.log("Hundido!!!");
 		}
+		tablero.ponerAgua(x,y);
+		return this.estado;
 	}
 	this.obtenerEstado=function(){
 		return this.estado;
+	}
+	this.esAgua=function(){
+		return false;
 	}
 }
 
 function Agua(){
 	this.nombre="agua";
+	this.estado="agua";
 	this.esAgua=function(){
 		return true;
 	}
-	this.meDisparan=function(){
-		console.log("agua")
+	this.meDisparan=function(tablero,x,y){
+		console.log("agua");
+		return this.estado;
 	}
 	this.obtenerEstado=function(){
-		return "agua";
+		return this.estado;
+	}
+	this.esAgua=function(){
+		return true;
 	}
 }
 

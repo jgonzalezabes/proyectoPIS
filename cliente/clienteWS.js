@@ -74,6 +74,9 @@ function ClienteWS(){
 		this.socket.on("casillaDisparada",function(casillaDisparada){
 			console.log(casillaDisparada);
 		});
+		this.socket.on("turnoIncorrecto",function(){
+			console.log("Espere su turno");
+		});
 		this.socket.on("finPartida",function(){
 			console.log("fin de la partida");
 			//iu.finPartida();
