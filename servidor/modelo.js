@@ -144,6 +144,9 @@ function Usuario(nick,juego){
 	this.obtenerEstado=function(x,y){
 		return this.tableroPropio.obtenerEstado(x,y);
 	}
+	this.obtenerFlota=function(){
+		return this.flota;
+	}
 	this.marcarEstado=function(estado,x,y){
 		this.tableroRival.marcarEstado(estado,x,y);
 		if (estado=="agua"){
@@ -289,6 +292,9 @@ function Tablero(size){
 		}
 	}
 	this.casillasLibres=function(x,y,tam){
+		if(x+tam>this.size){
+			return false;
+		}
 		for(i=x;i<tam;i++){
 			let contiene=this.casillas[i][y].contiene;
 			if (!contiene.esAgua()){

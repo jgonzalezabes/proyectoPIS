@@ -41,6 +41,54 @@ function ControlWeb(){
 			}
 		})
 	}
+	/*this.mostrarAgregarUsuario=function(){
+		// let cadena= '<div class="row" id="mAU">';//'<form class="form-row needs-validation"  id="mAJ">';
+		// cadena=cadena+"<div class='col'>";
+		// cadena=cadena+'<div class="row"><div class="col"><h2>El juego indefinido</h2></div></div>';
+		// cadena=cadena+'<div class="row">';
+		// cadena=cadena+'<div class="col">'
+  //       cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick (max 6 letras)" required></div>';
+  //       cadena=cadena+'<div class="col">';
+  //       cadena=cadena+'<button id="btnAU" class="btn btn-primary mb-2 mr-sm-2">Iniciar sesión</button>';
+  //       //cadena=cadena+'<a href="/auth/google" class="btn btn-primary mb-2 mr-sm-2">Accede con Google</a>';
+  //       cadena=cadena+'</div>'; //' </form>';
+  //       cadena=cadena+'<div id="nota"></div>';
+  //       cadena=cadena+'</div></div></div>';
+		$('#mH').remove();
+		$('#mAU').remove();
+  		let cadena= '<div id="mAU">';
+  		//cadena=cadena+"<h2>Batalla naval</h2>";
+  		//cadena=cadena+"<h6>La última sensación en juegos Web</h6>";
+  		//cadena=cadena+'<p><img src="cliente/img/wisconsin.webp" class="rounded" style="width:30%;" alt="Wisconsin">';
+  		cadena=cadena+'<div class="card" style="width:75%;">';
+		cadena=cadena+'<div class="card-body">';
+		cadena=cadena+'<h2 class="card-title">Batalla naval</h2>';
+		cadena=cadena+'<p class="card-text">Juego para 2 jugadores. Introduce un nick</p>';
+		//cadena=cadena+'<a href="#" class="btn btn-primary">Ver resultados</a>';
+		cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" style="width:100%;" placeholder="Introduce un nick (max 6 letras)" required>';
+  		cadena=cadena+'<button id="btnAU" class="btn btn-primary mb-2 mr-sm-2">Entrar</button>';
+		cadena=cadena+'</div>';
+		cadena=cadena+'<img class="card-img-bottom" src="cliente/img/armada.webp" alt="imagen barco" style="width:100%">'
+		cadena=cadena+'</div>'
+  		//cadena=cadena+'<p><img src="cliente/img/barco.jpg" class="rounded" style="width:40%;" alt="Wisconsin"></p>';
+      	//cadena=cadena+'<h6>Accede al juego con sólo introducir un nick</h6>';  		
+		$("#agregarUsuario").append(cadena);     
+		//$("#nota").append("<div id='aviso' style='text-align:right'>Inicia sesión con Google para jugar</div>");    
+
+		$("#btnAU").on("click",function(e){
+			if ($('#usr').val() === '' || $('#usr').val().length>6) {
+			    e.preventDefault();
+			    $('#nota').append('Nick inválido');
+			}
+			else{
+				var nick=$('#usr').val();
+				$("#mAU").remove();
+				//$("#aviso").remove();
+				rest.agregarUsuario(nick);
+				//mostrar gif
+			}
+		})
+	}*/
 	this.mostrarHome=function(){
 		$('#mH').remove();
 		let cadena="<div class='row' id='mH'>";
@@ -66,7 +114,7 @@ function ControlWeb(){
 			cws.abandonarPartida();
 		});
 	}
-	this.mostrarCrearPartida=function(){
+	/*this.mostrarCrearPartida=function(){
 		$('#mCP').remove();
 		let cadena= '<div class="row" id="mCP">';//'<form class="form-row needs-validation"  id="mAJ">';
         cadena=cadena+'<div class="col">';
@@ -79,11 +127,46 @@ function ControlWeb(){
 			$('#mLP').remove();
 			cws.crearPartida(); //Aquí empieza el ciclo de los web Sockets. Se llama a clienteWS
 		});
+	}*/
+	this.mostrarCrearPartida=function(){
+		$('#mCP').remove();
+		// let cadena= '<div class="row" id="mCP">';
+  //       cadena=cadena+'<div class="col">';
+  //       cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear partida</button>';
+  //       cadena=cadena+'</div>';
+  //       cadena=cadena+'</div>';
+
+        let cadena='<div class="card" id="mCP">';
+	  	cadena=cadena+'<div class="card-body">'
+	    cadena=cadena+'<h4 class="card-title">Crear partida</h4>';
+	    cadena=cadena+'<p class="card-text">Crea una nueva partida y espera rival.</p>';
+	    //cadena=cadena+'<a href="#" class="card-link">Card link</a>'	    
+	    cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear partida</button>';
+	  	cadena=cadena+'</div>';
+
+        $('#crearPartida').append(cadena);
+        $("#btnCP").on("click",function(e){		
+			$("#mCP").remove();
+			$('#mLP').remove();
+			//rest.crearPartida();
+			cws.crearPartida();
+		});
 	}
 	this.mostrarCodigo=function(codigo){//muestra el codigo de la partida
 		let cadena="Código de la partida: "+codigo;
 		$('#codigo').append(cadena);
 	}
+	/*this.mostrarCodigo=function(codigo){
+		let cadena="<div id='mCodigoPartida'><p>Código de la partida: "+codigo+"</p>";
+		cadena=cadena+'<button id="btnAP" class="btn btn-primary mb-2 mr-sm-2">Abandonar partida</button>';
+		cadena=cadena+"</div>";
+
+		$('#codigo').append(cadena);
+		$('#btnAP').on("click",function(e){
+			cws.abandonarPartida();
+			iu.finPartida();
+		});
+	}*/
 	/*this.mostrarListaDePartidas=function(lista){
 		$('#mLP').remove();
 		let cadena="<div id='mLP'>";		
@@ -133,4 +216,12 @@ function ControlWeb(){
 	//this.abandonarPartida=function(msg){
 	//	let cadena
 	//}
+	this.finPartida=function(){
+		$("#mCodigoPartida").remove();
+		$('#gc').remove();
+		cws.codigo=undefined;
+		tablero=new Tablero(10);
+		//tablero.mostrar(false);
+		iu.mostrarHome();
+	}
 }

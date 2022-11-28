@@ -35,8 +35,14 @@ function ServidorWS(){
 			cli.enviarAlRemitente(socket,"unionAPartida", res);
 		  	//comprobar que la partida puede comenzar (fase jugando de la partida)
 		  	let partida=juego.obtenerPartida(codigo);
-		  	cli.enviarATodosEnPartida(io,codigo,"aColocar",{});
-		  	
+		  	//cli.enviarATodosEnPartida(io,codigo,"aColocar",{});
+              if (partida.esDesplegando()){
+                  let us =juego.obtenerUsuario(nick);
+                  let flota=us.obtenerFlota();
+                  let res={};
+                  res.flota=flota;      
+                  cli.enviarATodosEnPartida(io,codigoStr,"faseDesplegando",res);
+              }
 		  });
 		  /*socket.on("abandonarPartida",function(){ //también debemos mostrar un modal al otro jugador diciéndole que el jugador "nick" ha abandonado la partida y elminar la partida
 		  	juego.juegoAbandona(nick,codigo);
@@ -79,7 +85,8 @@ function ServidorWS(){
 		  			cli.enviarAlRemitente(socket,"turnoIncorrecto",{});
 		  		}
 		  	}
-		  })
+		  });
+
 		});
 
 	}

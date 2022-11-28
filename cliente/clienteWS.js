@@ -66,20 +66,43 @@ function ClienteWS(){
 			iu.mostrarModal("Coloque sus barcos!");
 		});
 		this.socket.on("aJugar",function(){
-			iu.mostrarModal("A jugaaar!");
+			if (res.fase=="jugando"){
+				console.log("A jugaar! Turno de: "+res.turno);
+			}
 		});
-		this.socket.on("barcoColocado",function(barco){
-			console.log(barco);
+		this.socket.on("barcoColocado",function(res){
+			console.log("Barco "+res.barco+" colocado?: "+res.colocado);
+			let barco=tablero.flota[res.barco];
+			if (res.colocado){
+				tablero.terminarDeColocarBarco(barco,res.x,res.y);
+				cli.barcosDesplegados();
+			}
+			else{
+				iu.mostrarModal("No se puede colocar barco");
+			}
 		});
+		this.socket.on("faseDesplegando",function(data){
+			tablero.flota=data.flota;
+			//tablero.mostrar(true);
+			tablero.elementosGrid();
+			tablero.mostrarFlota();//data.flota);
+			console.log("Ya puedes desplegar la flota");
+		});
+		/*this.socket.on("jugadorAbandona",function(data){
+			iu.mostrarModal("Jugador "+data.nick+" abandona");
+			iu.finPartida();
+		});*/
 		this.socket.on("casillaDisparada",function(casillaDisparada){
 			console.log(casillaDisparada);
 		});
 		this.socket.on("turnoIncorrecto",function(){
 			console.log("Espere su turno");
 		});
-		this.socket.on("finPartida",function(){
-			console.log("fin de la partida");
-			//iu.finPartida();
+		this.socket.on("finPartida",function(res){
+			console.log("Fin de la partida");
+			console.log("Ganador: "+res.turno);
+			iu.mostrarModal("Fin de la partida. Ganador: "+res.turno);
+			iu.finPartida();
 		});
 
 	}
