@@ -103,16 +103,16 @@ function Juego(test){
 	this.obtenerPartida=function(codigo){
 		return this.partidas[codigo];
 	}
-	this.jugadorAbandona=function(nick,codigo){//poner insertarLog 
-		let usr=this.obtenerUsuario(nick);
-		if (usr){
-			usr.abandonarPartida(codigo);
-		};
+	this.jugadorAbandona = function(nick, codigo){
+		if(this.partidas[codigo]){
+			this.partidas[codigo].fase = "final";	
+			this.insertarLog({"operacion":"jugadorAbandonaPartida","usuario":nick,"partida":this.partida,"fecha":Date()},function(){
+				console.log("Registro de log insertado");
+			});
+		}
 	}
-
 	this.insertarLog=function(log,callback){
 		if (this.test == "false"){
-			console.log("aqui llega");
 			this.cad.insertarLog(log,callback);
 		}
 	}
@@ -140,14 +140,6 @@ function Usuario(nick,juego){
 	}
 	this.unirseAPartida=function(codigo){
 		return this.juego.unirseAPartida(codigo,this);
-	}
-	this.abandonarPartida=function(codigo){
-		if(this.partida && this.partida == codigo && !this.partida.fase.esFinal()){
-			this.juego.insertarLog({"operacion":"jugadorAbandonaPartida","usuario":nick,"partida":this.partida,"fecha":Date()},function(){
-				console.log("Registro de log insertado");
-			});
-			this.partida.abandonarPartida();
-		}
 	}
 	this.inicializarTableros=function(dim){
 		this.tableroPropio=new Tablero(dim);
@@ -269,9 +261,6 @@ function Partida(codigo,usr){
 	}
 	this.eliminarUsuario=function(nick){
 		delete this.usuarios[nick];
-	}
-	this.abandonarPartida=function(){
-		this.fase="final";
 	}
 	this.flotasDesplegadas=function(){
 		for(i=0;i<this.jugadores.length;i++){

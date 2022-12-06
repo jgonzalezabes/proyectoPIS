@@ -46,7 +46,7 @@ function ClienteWS(){
 				console.log("No se ha podido crear partida")
 			}});
 
-		this.socket.on("unidoAPartida", function(data){
+		this.socket.on("unionAPartida", function(data){
 			if (data.codigo!= -1){
 				console.log("Usuario "+cli.nick+" se une a partida codigo: "+data.codigo);
 				iu.mostrarAbandonarPartida();
@@ -88,7 +88,7 @@ function ClienteWS(){
 			console.log("Ya puedes desplegar la flota");
 		});
 		this.socket.on("jugadorAbandona",function(data){
-			iu.mostrarModal("Jugador "+data+" abandona");
+			iu.mostrarModal("Jugador "+data+" ha abandonado la partida");
 			iu.finPartida();
 		});
 		this.socket.on("casillaDisparada",function(casillaDisparada){

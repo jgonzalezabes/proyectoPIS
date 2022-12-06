@@ -48,7 +48,7 @@ function ClienteRest(){
 			console.log(data);
 			if (data.codigo!=-1){
 				console.log("Usuario "+nick+" crea partida codigo: "+data.codigo)
-				iu.mostrarCodigo(data.codigo);
+				iu.mostrarAbandonarPartida();
 				//ws.nick=data.nick;
 				//$.cookie("nick",ws.nick);
 				//iu.mostrarHome(data);
