@@ -11,11 +11,14 @@ function ClienteWS(){
 	this.crearPartida=function(){ //encapsula el emit
 		this.socket.emit("crearPartida",rest.nick);
 	}
-	this.unirseAPartida=function(){
+	this.unirseAPartida=function(codigo){
 		this.socket.emit("unirseAPartida",rest.nick,codigo);
 	}
 	this.abandonarPartida=function(){
-		this.socket.emit("abandonarPartida",rest.nick);
+		this.socket.emit("abandonarPartida",rest.nick,cws.codigo);
+	}
+	this.salir=function(){
+		this.socket.emit("salir",rest.nick,cws.codigo);
 	}
 	this.colocarBarco=function(nombre,x,y){
 		this.socket.emit("colocarBarco",rest.nick,nombre,x,y);
@@ -36,7 +39,7 @@ function ClienteWS(){
 			console.log(data);
 			if (data.codigo!= -1){
 				console.log("Usuario "+rest.nick+" crea partida codigo: "+data.codigo)
-				iu.mostrarCodigo(data.codigo);
+				iu.mostrarAbandonarPartida();
 				cli.codigo=data.codigo;
 			}
 			else{
@@ -46,7 +49,7 @@ function ClienteWS(){
 		this.socket.on("unidoAPartida", function(data){
 			if (data.codigo!= -1){
 				console.log("Usuario "+cli.nick+" se une a partida codigo: "+data.codigo);
-				iu.mostrarCodigo(data.codigo); //muestra el codigo de la partida
+				iu.mostrarAbandonarPartida();
 				cli.codigo=data.codigo;
 			}
 			else{
@@ -57,10 +60,6 @@ function ClienteWS(){
 			if (!cli.codigo){
 				iu.mostrarListaDePartidasDisponibles(lista);
 			}
-		});
-		this.socket.on("jugadorAbandona",function(data){
-			iu.mostrarHome();
-			//iu.finPartida(); //debe eliminar atributos, y todo eso
 		});
 		this.socket.on("aColocar",function(){
 			iu.mostrarModal("Coloque sus barcos!");
@@ -88,12 +87,22 @@ function ClienteWS(){
 			tablero.mostrarFlota();//data.flota);
 			console.log("Ya puedes desplegar la flota");
 		});
-		/*this.socket.on("jugadorAbandona",function(data){
-			iu.mostrarModal("Jugador "+data.nick+" abandona");
+		this.socket.on("jugadorAbandona",function(data){
+			iu.mostrarModal("Jugador "+data+" abandona");
 			iu.finPartida();
-		});*/
+		});
 		this.socket.on("casillaDisparada",function(casillaDisparada){
 			console.log(casillaDisparada);
+		});
+		this.socket.on("disparo",function(res){
+			console.log(res.impacto);
+			console.log("Turno: "+res.turno);
+			if (res.atacante==rest.nick){
+				tablero.updateCell(res.x,res.y,res.impacto,'computer-player');
+			}
+			else{
+				tablero.updateCell(res.x,res.y,res.impacto,'human-player');	
+			}
 		});
 		this.socket.on("turnoIncorrecto",function(){
 			console.log("Espere su turno");

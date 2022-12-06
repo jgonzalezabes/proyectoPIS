@@ -11,8 +11,9 @@ const modelo = require("./servidor/modelo.js");
 const sWS = require("./servidor/servidorWS.js");
 
 const PORT = process.env.PORT || 3000;
+var args = process.argv.slice(2);
 
-let juego = new modelo.Juego();
+let juego = new modelo.Juego(args[0]);
 let servidorWS=new sWS.ServidorWS();
 
 app.use(express.static(__dirname + "/"));
@@ -56,6 +57,12 @@ app.get("/salir/:nick",function(request,response){
   let nick=request.params.nick;
   juego.usuarioSale(nick);
   response.send({res:"ok"})
+});
+
+app.get("/obtenerLogs",function(request,response){
+  juego.obtenerLogs(function(logs){
+    response.send(logs);
+  });
 });
 
 app.get("/comprobarUsuario/:nick",function(request,response){

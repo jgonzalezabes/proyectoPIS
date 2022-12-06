@@ -7,9 +7,12 @@ function ServidorWS(){
 	this.enviarATodosEnPartida=function(io,codigo,mensaje,datos){
 		io.sockets.in(codigo).emit(mensaje,datos)
 	}
+	this.enviarAlRestoPartida=function(socket,codigo,mensaje,datos){
+    socket.broadcast.to(codigo).emit(mensaje,datos)
+  }
 	this.enviarATodos=function(socket,mens,datos){
-    	socket.broadcast.emit(mens,datos);
-    }
+    socket.broadcast.emit(mens,datos);
+  }
 
 
 
@@ -44,12 +47,14 @@ function ServidorWS(){
                   cli.enviarATodosEnPartida(io,codigoStr,"faseDesplegando",res);
               }
 		  });
-		  /*socket.on("abandonarPartida",function(){ //también debemos mostrar un modal al otro jugador diciéndole que el jugador "nick" ha abandonado la partida y elminar la partida
-		  	juego.juegoAbandona(nick,codigo);
-		  	cli.enviarATodosEnPartida(io,codigo,"jugadorAbandona",{
-		  		socket.leave(codigo.toString());
-		  	});
-		  });*/
+		  socket.on("abandonarPartida",function(nick, codigo){ //también debemos mostrar un modal al otro jugador diciéndole que el jugador "nick" ha abandonado la partida y elminar la partida
+		  	juego.jugadorAbandona(nick,codigo);
+		  	cli.enviarATodosEnPartida(io,codigo,"jugadorAbandona",nick);
+		  });
+		  socket.on("salir",function(nick, codigo){ //también debemos mostrar un modal al otro jugador diciéndole que el jugador "nick" ha abandonado la partida y elminar la partida
+		  	juego.jugadorAbandona(nick,codigo);
+		  	cli.enviarAlRestoPartida(socket,codigo,"jugadorAbandona",nick);
+		  });
 		  socket.on("colocarBarco",function(nick,nombre,x,y){
 		  	let us = juego.obtenerUsuario(nick);
 		  	if(us){

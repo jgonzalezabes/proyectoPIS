@@ -1,6 +1,10 @@
-function Juego(){
+let cad=require('./cad.js');
+
+function Juego(test){
 	this.partidas={};
 	this.usuarios={}; //array asociativo
+	this.cad=new cad.Cad();
+	this.test=test;
 
 	this.agregarUsuario=function(nick){
 		let res={"nick":-1};
@@ -8,6 +12,9 @@ function Juego(){
 			this.usuarios[nick]=new Usuario(nick,this);
 			res={"nick":nick};
 			console.log("Nuevo usuario: "+nick);
+			this.insertarLog({"operacion":"Inicio de sesión","usuario":nick,"fecha":Date()},function(){
+				console.log("Registro de log insertado");
+			});
 		}
 		return res;
 	}
@@ -18,6 +25,9 @@ function Juego(){
 		if (this.usuarios[nick]){
 			this.finalizarPartida(nick);
 			this.eliminarUsuario(nick);
+			this.insertarLog({"operacion":"Sign Out","usuario":nick,"fecha":Date()},function(){
+				console.log("Registro de log insertado");
+			});
 		}
 	}
 	this.jugadorCreaPartida=function(nick){
@@ -48,6 +58,9 @@ function Juego(){
 	this.crearPartida=function(usr){
 		let codigo=Date.now();
 		console.log("Usuario "+usr.nick+ " crea partida "+codigo);
+		this.insertarLog({"operacion":"crearPartida", "Codigo partida":codigo ,"propietario":usr.nick,"fecha":Date()},function(){
+			console.log("Registro de log insertado");
+		});
 		this.partidas[codigo]=new Partida(codigo,usr); 
 		return codigo;
 	}
@@ -81,11 +94,37 @@ function Juego(){
 		for (let key in this.partidas){
 			if (this.partidas[key].fase=="inicial" && this.partidas[key].estoy(nick)){
 				this.partidas[key].fase="final";
+				this.insertarLog({"operacion":"FinalizarPartida","partida":this.partidas[key].codigo,"fecha":Date()},function(){
+					console.log("Registro de log insertado");
+				});
 			}
 		}
 	}
 	this.obtenerPartida=function(codigo){
 		return this.partidas[codigo];
+	}
+	this.jugadorAbandona=function(nick,codigo){//poner insertarLog 
+		let usr=this.obtenerUsuario(nick);
+		if (usr){
+			usr.abandonarPartida(codigo);
+		};
+	}
+
+	this.insertarLog=function(log,callback){
+		if (this.test == "false"){
+			console.log("aqui llega");
+			this.cad.insertarLog(log,callback);
+		}
+	}
+
+	this.obtenerLogs=function(callback){
+		this.cad.obtenerLogs(callback);
+	}
+
+	if(this.test == "false"){
+		this.cad.conectar(function(db){
+			console.log("Conectado a Atlas");
+		})
 	}
 }
 
@@ -101,6 +140,14 @@ function Usuario(nick,juego){
 	}
 	this.unirseAPartida=function(codigo){
 		return this.juego.unirseAPartida(codigo,this);
+	}
+	this.abandonarPartida=function(codigo){
+		if(this.partida && this.partida == codigo && !this.partida.fase.esFinal()){
+			this.juego.insertarLog({"operacion":"jugadorAbandonaPartida","usuario":nick,"partida":this.partida,"fecha":Date()},function(){
+				console.log("Registro de log insertado");
+			});
+			this.partida.abandonarPartida();
+		}
 	}
 	this.inicializarTableros=function(dim){
 		this.tableroPropio=new Tablero(dim);
@@ -161,7 +208,11 @@ function Usuario(nick,juego){
 		}
 		return true;
 	}
+	this.insertarLog=function(logs, callback){
+		this.juego.insertarLog(logs, callback);
+	}
 }
+
 
 function Partida(codigo,usr){
 	this.codigo=codigo;
@@ -178,6 +229,9 @@ function Partida(codigo,usr){
 			usr.inicializarTableros(5);
 			usr.inicializarFlota();
 			this.comprobarFase();
+			usr.insertarLog({"operacion":"unirseAPartida","Codigo Partida":this.codigo,"jugador2":usr.nick,"fecha":Date()},function(){
+				console.log("Registro de log insertado");
+			});
 		}
 		else{
 			res=-1;
@@ -207,8 +261,17 @@ function Partida(codigo,usr){
 	this.esDesplegando=function(){
 		return this.fase=="desplegando";
 	}
+	this.esAbandonada=function(){
+		return this.fase=="abandonada";
+	}
 	this.esFinal=function(){
 		return this.fase=="final";
+	}
+	this.eliminarUsuario=function(nick){
+		delete this.usuarios[nick];
+	}
+	this.abandonarPartida=function(){
+		this.fase="final";
 	}
 	this.flotasDesplegadas=function(){
 		for(i=0;i<this.jugadores.length;i++){
@@ -376,7 +439,7 @@ function Agua(){
 	}
 }
 
-function Inicial(){
+/*function Inicial(){
 	this.nombre="inicial";
 }
 
@@ -386,6 +449,6 @@ function Jugando(){
 
 function Desplegando(){
 	this.nombre="desplegando";
-}
+}*/
 
 module.exports.Juego = Juego;

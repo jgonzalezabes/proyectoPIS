@@ -5,7 +5,7 @@ describe("El juego...", function() {
   var us1, us2, partida;
 
   beforeEach(function(){
-    miJuego=new modelo.Juego();
+    miJuego=new modelo.Juego(true);
     miJuego.agregarUsuario("pepe");
     miJuego.agregarUsuario("luis");
 
