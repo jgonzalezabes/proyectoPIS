@@ -15,7 +15,7 @@ function ControlWeb(){
     $('#mAU').remove();
 		let cadena= '<div class="row" id="mAU">';//'<form class="form-row needs-validation"  id="mAJ">';
 		cadena=cadena+"<div class='col'>";
-		cadena=cadena+'<div class="row"><div class="col"><h2>El juego indefinido</h2></div></div>';
+		cadena=cadena+'<div class="row"><div class="col"><h2>El juego hundir la flota</h2></div></div>';
 		cadena=cadena+'<div class="row">';
 		cadena=cadena+'<div class="col">'
     cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick (max 6 letras)" required></div>';
@@ -105,8 +105,8 @@ function ControlWeb(){
 			$("#mCP").remove();
 			$('#mLP').remove();
 			$('#mH').remove();
-			rest.usuarioSale();
 			cws.salir();
+			rest.usuarioSale();
 			$('#gc').remove();
 			cws.codigo=undefined;
 			$.removeCookie("nick");
@@ -192,9 +192,6 @@ function ControlWeb(){
 		$('#contenidoModal').append(cadena);
 		$('#miModal').modal("show");
 	}
-	//this.abandonarPartida=function(msg){
-	//	let cadena
-	//}
 	this.finPartida=function(){
 		$('#gc').remove();
 		cws.codigo=undefined;

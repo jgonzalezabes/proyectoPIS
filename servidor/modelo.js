@@ -156,8 +156,11 @@ function Usuario(nick,juego){
 		//comprobar fase
 		if (this.partida && this.partida.fase=="desplegando"){//poner otro && que te diga que si una barco esté desplegado no te deje colocarlo
 			let barco=this.flota[nombre];
-			this.tableroPropio.colocarBarco(barco,x,y);
+			if(!barco.desplegado){
+				return this.tableroPropio.colocarBarco(barco,x,y);
 		}
+		}
+		return false;
 	}
 	this.todosDesplegados=function(){
 		for(var key in this.flota){
@@ -218,7 +221,7 @@ function Partida(codigo,usr){
 			this.jugadores.push(usr);
 			console.log("El usuario "+usr.nick+" se une a la partida "+this.codigo);
 			usr.partida=this;
-			usr.inicializarTableros(5);
+			usr.inicializarTableros(10);
 			usr.inicializarFlota();
 			this.comprobarFase();
 			usr.insertarLog({"operacion":"unirseAPartida","Codigo Partida":this.codigo,"jugador2":usr.nick,"fecha":Date()},function(){
@@ -337,19 +340,23 @@ function Tablero(size){
 	}
 	this.colocarBarco=function(barco,x,y){
 		if (this.casillasLibres(x,y,barco.tam)){
-			for(i=x;i<barco.tam;i++){
+			for(i=x;i<x+barco.tam;i++){
 				this.casillas[i][y].contiene=barco;
 			}
 			barco.desplegado=true;
+			return true;
 		}
+		return false;
 	}
 	this.casillasLibres=function(x,y,tam){
 		if(x+tam>this.size){
+			console.log("el barco se sale del tablero");
 			return false;
 		}
-		for(i=x;i<tam;i++){
+		for(i=x;i<x+tam;i++){
 			let contiene=this.casillas[i][y].contiene;
 			if (!contiene.esAgua()){
+				console.log("No es agua");
 				return false;
 			}
 		}

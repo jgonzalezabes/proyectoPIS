@@ -64,14 +64,13 @@ function ClienteWS(){
 		this.socket.on("aColocar",function(){
 			iu.mostrarModal("Coloque sus barcos!");
 		});
-		this.socket.on("aJugar",function(){
-			if (res.fase=="jugando"){
-				console.log("A jugaar! Turno de: "+res.turno);
-			}
+		this.socket.on("aJugar",function(res){
+			iu.mostrarModal("A jugaar! Turno de "+ res.turno);
 		});
 		this.socket.on("barcoColocado",function(res){
-			console.log("Barco "+res.barco+" colocado?: "+res.colocado);
-			let barco=tablero.flota[res.barco];
+			console.log("Barco "+res.nombre+" colocado?: "+res.colocado);
+			let barco=tablero.flota[res.nombre];
+			console.log(barco);
 			if (res.colocado){
 				tablero.terminarDeColocarBarco(barco,res.x,res.y);
 				cli.barcosDesplegados();
@@ -91,9 +90,6 @@ function ClienteWS(){
 			iu.mostrarModal("Jugador "+data+" ha abandonado la partida");
 			iu.finPartida();
 		});
-		this.socket.on("casillaDisparada",function(casillaDisparada){
-			console.log(casillaDisparada);
-		});
 		this.socket.on("disparo",function(res){
 			console.log(res.impacto);
 			console.log("Turno: "+res.turno);
@@ -107,7 +103,7 @@ function ClienteWS(){
 		this.socket.on("turnoIncorrecto",function(){
 			console.log("Espere su turno");
 		});
-		this.socket.on("finPartida",function(res){
+		this.socket.on("finPartida",function(res){//antes ponia res.turno
 			console.log("Fin de la partida");
 			console.log("Ganador: "+res.turno);
 			iu.mostrarModal("Fin de la partida. Ganador: "+res.turno);
