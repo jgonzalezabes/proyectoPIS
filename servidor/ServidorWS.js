@@ -93,24 +93,22 @@ function ServidorWS(){
 		  });
 		  socket.on("disparar",function(nick,x,y){
 		  	let us = juego.obtenerUsuario(nick);
-		  	if(us){
+		  	if(us && us.partida.turno == us && us.partida.esJugando()){
 		  		let codigoStr=us.partida.codigo.toString();
-		  		let rival = us.partida.obtenerRival(nick);
-		  		
-		  		if(us.partida.turno == us){
-		  			us.disparar(x,y);
-		  			let impacto=rival.obtenerEstado(x,y);
-		  			console.log(impacto);
-		  			if(us.partida.esFinal()){
-		  				let res={"turno":us.partida.turno.nick};
-		  				cli.enviarATodosEnPartida(io,codigoStr,"finPartida",res);
-		  			}else{
-		  				let data={"x":x,"y":y,"impacto":impacto,"turno":us.partida.turno.nick,"atacante":us.nick}
-		  				cli.enviarATodosEnPartida(io,codigoStr,"disparo",data);
-		  			}
-		  		}else{
-		  			cli.enviarAlRemitente(socket,"turnoIncorrecto",{});
-		  		}
+		  		//let rival = us.partida.obtenerRival(nick);
+
+	  			us.disparar(x,y);
+	  			let impacto=us.obtenerEstadoMarcado(x,y);
+	  			console.log(impacto);
+	  			if(us.partida.esFinal()){
+	  				let res={"turno":us.partida.turno.nick};
+	  				cli.enviarATodosEnPartida(io,codigoStr,"finPartida",res);
+	  			}else{
+	  				let data={"x":x,"y":y,"impacto":impacto,"turno":us.partida.turno.nick,"atacante":us.nick}
+	  				cli.enviarATodosEnPartida(io,codigoStr,"disparo",data);
+	  			}
+	  		}else{
+	  			cli.enviarAlRemitente(socket,"turnoIncorrecto",{});
 		  	}
 		  });
 

@@ -37,12 +37,12 @@ describe("El juego...", function() {
   it("comprobar tableros de los usuarios",function(){
     expect(us1.tableroPropio).toBeDefined();
     expect(us1.tableroPropio.esTablero()).toEqual(true); //no se si haría falta poner el toBeTrue()
-    expect(us1.tableroPropio.casillas.length).toEqual(5);
-    expect(us1.tableroPropio.casillas[0].length).toEqual(5);
+    expect(us1.tableroPropio.casillas.length).toEqual(10);
+    expect(us1.tableroPropio.casillas[0].length).toEqual(10);
     //comprobamos que las casillas son agua
-    for (i=0;i<5;i++){
-      for (j=0;j<5;j++){
-        expect(us1.tableroPropio.casillas[i][j].esAgua()).toEqual(true);;
+    for (i=0;i<10;i++){
+      for (j=0;j<10;j++){
+        expect(us1.tableroPropio.casillas[i][j].contiene.esAgua()).toEqual(true);;
       }
     }
   });

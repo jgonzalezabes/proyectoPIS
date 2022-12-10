@@ -186,6 +186,9 @@ function Usuario(nick,juego){
 	this.obtenerEstado=function(x,y){
 		return this.tableroPropio.obtenerEstado(x,y);
 	}
+	this.obtenerEstadoMarcado=function(x,y){
+		return this.tableroRival.obtenerEstado(x,y);
+	}
 	this.obtenerFlota=function(){
 		return this.flota;
 	}
@@ -372,7 +375,7 @@ function Tablero(size){
 		return this.casillas[x][y].contiene.obtenerEstado();
 	}
 	this.marcarEstado=function(estado,x,y){
-		this.casillas[x][y].contiene=estado;
+		this.casillas[x][y].contiene.estado=estado;
 	}
 	this.esTablero=function(){
 		return true;
