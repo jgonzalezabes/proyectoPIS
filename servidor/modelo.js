@@ -150,6 +150,9 @@ function Usuario(nick,juego){
 		// this.flota.push(new Barco("b4",4));
 		this.flota["b2"]=new Barco("b2",2);
 		this.flota["b4"]=new Barco("b4",4);
+		this.flota["b9"]=new Barco("b9",9);
+		this.flota["b5"]=new Barco("b5",5);
+		this.flota["b1"]=new Barco("b1",1);
 		// otros barcos: 1, 3, 5,...
 	}
 	this.colocarBarco=function(nombre,x,y){
