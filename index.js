@@ -10,7 +10,7 @@ const io = new Server(server);
 const modelo = require("./servidor/modelo.js");
 const sWS = require("./servidor/servidorWS.js");
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 var args = process.argv.slice(2);
 
 let juego = new modelo.Juego(args[0]);
