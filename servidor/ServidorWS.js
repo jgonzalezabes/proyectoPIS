@@ -8,7 +8,7 @@ function ServidorWS(){
 		io.sockets.in(codigo).emit(mensaje,datos)
 	}
 	this.enviarAlRestoPartida=function(socket,codigo,mensaje,datos){
-    socket.broadcast.to(codigo).emit(mensaje,datos)
+    socket.broadcast.to(codigo).emit(mensaje,datos);
   }
 	this.enviarATodos=function(socket,mens,datos){
     socket.broadcast.emit(mens,datos);
