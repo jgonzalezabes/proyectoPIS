@@ -6,7 +6,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
+const passport = require("passport");
 const modelo = require("./servidor/modelo.js");
 const sWS = require("./servidor/servidorWS.js");
 
@@ -23,6 +23,8 @@ app.get("/", function(request,response){
   response.setHeader("Content-type","text/html");
   response.send(contenido);
 });
+
+app.get("/auth/google",passport.authenticate('google', { scope: ['profile','email'] }));
 
 app.get("/agregarUsuario/:nick",function(request,response){
   let nick = request.params.nick;
