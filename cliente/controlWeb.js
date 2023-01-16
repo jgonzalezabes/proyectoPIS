@@ -13,26 +13,45 @@ function ControlWeb(){
 	this.mostrarAgregarUsuario=function(){
 		$('#mH').remove();
     $('#mAU').remove();
-		let cadena= '<div class="row" id="mAU">';//'<form class="form-row needs-validation"  id="mAJ">';
+    $('#mInv').remove();
+		let cadena= '<div class="row" id="mAU">';
 		cadena=cadena+"<div class='col'>";
-		cadena=cadena+'<div class="row"><div class="col"><h2>El juego hundir la flota</h2></div></div>';
+		cadena=cadena+'<div class="row"><div class="col"><h2>Bienvenido al juego de hundir la flota</h2></div></div>';
 		cadena=cadena+'<div class="row">';
-		cadena=cadena+'<div class="col">'
-    cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick (max 6 letras)" required></div>';
+		//cadena=cadena+'<div class="col">'
+    //cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick" required></div>';
     cadena=cadena+'<div class="col">';
-    cadena=cadena+'<button id="btnAU" class="btn btn-primary mb-2 mr-sm-2">Iniciar sesión</button>';
-    cadena=cadena+'<a href="/auth/google" class="btn btn-primary mb-2 mr-sm-2">Accede con Google</a>';
-    cadena=cadena+'</div>'; //' </form>';
+    cadena=cadena+'<button id="btnInv" class="btn mb-2 mr-sm-2">Empezar como usuario invitado</button>';
+    cadena=cadena+'<a href="/auth/google" class="btn mb-2 mr-sm-2">Accede con Google</a>';
+    cadena=cadena+'</div></div>';
+
+		$("#agregarUsuario").append(cadena);   
+
+		$("#btnInv").on("click",function(e){
+			e.preventDefault();
+			iu.mostrarEmpezarInivitado();
+		})
+	}
+	this.mostrarEmpezarInivitado=function(){
+		$('#mH').remove();
+    $('#mAU').remove();
+    $('#mInv').remove();
+		let cadena='<div id="mInv" class="invitado-card mx-auto">';
+    cadena=cadena+'<h3>Inserte un nombre de usuario</h3>';
+    cadena=cadena+'<form class="invitado-form">';
+    cadena=cadena+'<input type="text" id="usr" placeholder="Nombre de Usuario" required/>';
     cadena=cadena+'<div id="nota"></div>';
-    cadena=cadena+'</div></div></div>';
+    cadena=cadena+'<a href="/auth/google" style="color:#216ce7">Conectar con Google</a>';
+    cadena=cadena+'<button id="btnAU" class="btn">Empezar</button>';
+    cadena=cadena+'</form></div>';
 
-		$("#agregarUsuario").append(cadena);     
-		//$("#nota").append("<div id='aviso' style='text-align:right'>Inicia sesión con Google para jugar</div>");    
+    $('#agregarUsuario').append(cadena);
 
-		$("#btnAU").on("click",function(e){
-			if ($('#usr').val() === '' || $('#usr').val().length>6) {
-			    e.preventDefault();
-			    $('#nota').append('Nick inválido');
+    $("#btnAU").on("click",function(e){
+			if ($('#usr').val() === '' || $('#usr').val().length>12) {
+				//$('#nota').remove();
+			  e.preventDefault();
+			  $('#nota').append('Por favor, inserte un nick más corto (máx. caracteres -> 12)');
 			}
 			else{
 				var nick=$('#usr').val();
@@ -42,61 +61,14 @@ function ControlWeb(){
 			}
 		})
 	}
-	/*this.mostrarAgregarUsuario=function(){
-		// let cadena= '<div class="row" id="mAU">';//'<form class="form-row needs-validation"  id="mAJ">';
-		// cadena=cadena+"<div class='col'>";
-		// cadena=cadena+'<div class="row"><div class="col"><h2>El juego indefinido</h2></div></div>';
-		// cadena=cadena+'<div class="row">';
-		// cadena=cadena+'<div class="col">'
-  //       cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="Introduce tu nick (max 6 letras)" required></div>';
-  //       cadena=cadena+'<div class="col">';
-  //       cadena=cadena+'<button id="btnAU" class="btn btn-primary mb-2 mr-sm-2">Iniciar sesión</button>';
-  //       //cadena=cadena+'<a href="/auth/google" class="btn btn-primary mb-2 mr-sm-2">Accede con Google</a>';
-  //       cadena=cadena+'</div>'; //' </form>';
-  //       cadena=cadena+'<div id="nota"></div>';
-  //       cadena=cadena+'</div></div></div>';
-		$('#mH').remove();
-		$('#mAU').remove();
-  		let cadena= '<div id="mAU">';
-  		//cadena=cadena+"<h2>Batalla naval</h2>";
-  		//cadena=cadena+"<h6>La última sensación en juegos Web</h6>";
-  		//cadena=cadena+'<p><img src="cliente/img/wisconsin.webp" class="rounded" style="width:30%;" alt="Wisconsin">';
-  		cadena=cadena+'<div class="card" style="width:75%;">';
-		cadena=cadena+'<div class="card-body">';
-		cadena=cadena+'<h2 class="card-title">Batalla naval</h2>';
-		cadena=cadena+'<p class="card-text">Juego para 2 jugadores. Introduce un nick</p>';
-		//cadena=cadena+'<a href="#" class="btn btn-primary">Ver resultados</a>';
-		cadena=cadena+'<input type="text" class="form-control mb-2 mr-sm-2" id="usr" style="width:100%;" placeholder="Introduce un nick (max 6 letras)" required>';
-  		cadena=cadena+'<button id="btnAU" class="btn btn-primary mb-2 mr-sm-2">Entrar</button>';
-		cadena=cadena+'</div>';
-		cadena=cadena+'<img class="card-img-bottom" src="cliente/img/armada.webp" alt="imagen barco" style="width:100%">'
-		cadena=cadena+'</div>'
-  		//cadena=cadena+'<p><img src="cliente/img/barco.jpg" class="rounded" style="width:40%;" alt="Wisconsin"></p>';
-      	//cadena=cadena+'<h6>Accede al juego con sólo introducir un nick</h6>';  		
-		$("#agregarUsuario").append(cadena);     
-		//$("#nota").append("<div id='aviso' style='text-align:right'>Inicia sesión con Google para jugar</div>");    
-
-		$("#btnAU").on("click",function(e){
-			if ($('#usr').val() === '' || $('#usr').val().length>6) {
-			    e.preventDefault();
-			    $('#nota').append('Nick inválido');
-			}
-			else{
-				var nick=$('#usr').val();
-				$("#mAU").remove();
-				//$("#aviso").remove();
-				rest.agregarUsuario(nick);
-				//mostrar gif
-			}
-		})
-	}*/
 	this.mostrarHome=function(){
 		$('#mH').remove();
+		$('#mInv').remove();
 		let cadena="<div class='row' id='mH'>";
 		cadena=cadena+'<div class="col">';
-		cadena=cadena+"<p>Bienvenido "+rest.nick+"</p>";
-		cadena=cadena+'<button id="btnSalir" class="btn btn-primary mb-2 mr-sm-2">Salir</button>';
-		cadena=cadena+"<div id='codigo'></div>"
+		cadena=cadena+"<h4>Bienvenido "+rest.nick+". Seleccione que le gustaría hacer</h4>";
+		cadena=cadena+'<button style="background-color: #dd1b09" id="btnSalir" class="btn mb-2 mr-sm-2">Cerrar Sesión</button>';
+		cadena=cadena+"<div id='codigo'></div>";
 		cadena=cadena+"</div></div>";
 		$('#agregarUsuario').append(cadena);
 		this.mostrarCrearPartida();
@@ -137,10 +109,10 @@ function ControlWeb(){
 
         let cadena='<div class="card" id="mCP">';
 	  	cadena=cadena+'<div class="card-body">'
-	    cadena=cadena+'<h4 class="card-title">Crear partida</h4>';
-	    cadena=cadena+'<p class="card-text">Crea una nueva partida y espera rival.</p>';
+	    cadena=cadena+'<h4 style="color: #222222" class="card-title">Crear partida</h4>';
+	    cadena=cadena+'<p style="color: #222222" class="card-text">Crea una nueva partida y espera rival.</p>';
 	    //cadena=cadena+'<a href="#" class="card-link">Card link</a>'	    
-	    cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear partida</button>';
+	    cadena=cadena+'<button id="btnCP" class="btn mb-2 mr-sm-2">Crear partida</button>';
 	  	cadena=cadena+'</div>';
 
         $('#crearPartida').append(cadena);
@@ -152,7 +124,7 @@ function ControlWeb(){
 		});
 	}
 	this.mostrarAbandonarPartida=function(){
-		let cadena='<button id="btnAP" class="btn btn-primary mb-2 mr-sm-2">Abandonar partida</button>';
+		let cadena='<button id="btnAP" class="btn mb-2 mr-sm-2">Abandonar partida</button>';
 		cadena=cadena+"</div>";
 		$('#codigo').append(cadena);
 		$('#btnAP').on("click",function(e){
@@ -164,13 +136,13 @@ function ControlWeb(){
 		let cadena="<div class='row' id='mLP'>";
 		cadena=cadena+"<div class='col'>";
 		cadena=cadena+"<h2>Lista de partidas disponibles</h2>";
-		cadena=cadena+'<button id="btnAL" class="btn btn-primary mb-2 mr-sm-2">Actualizar</button>';
+		cadena=cadena+'<button id="btnAL" class="btn mb-2 mr-sm-2">Actualizar</button>';
 		cadena=cadena+'<ul class="list-group">';
 		for(i=0;i<lista.length;i++){
 		  cadena = cadena+'<li class="list-group-item"><a href="#" value="'+lista[i].codigo+'"> Nick propietario: '+lista[i].owner+'</a></li>';
 		}
 		cadena=cadena+"</ul>";
-		cadena=cadena+"</div></div>"
+		cadena=cadena+"</div></div>";
 		$('#listaPartidas').append(cadena);
 
 		$(".list-group a").click(function(){
@@ -186,7 +158,7 @@ function ControlWeb(){
 			rest.obtenerListaPartidasDisponibles();
 		})
 	}
-	this.mostrarModal=function(msg){ //el modal e un mensaje que se muestra por pantalla
+	this.mostrarModal=function(msg){
 		$('#mM').remove();
 		var cadena="<p id='mM'>"+msg+"</p>";
 		$('#contenidoModal').append(cadena);

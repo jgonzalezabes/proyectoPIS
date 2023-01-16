@@ -353,6 +353,7 @@ function Tablero(size){
 			return true;
 		}
 		return false;
+		//this.barco.colocar(x,y,tam); //para hacer tipos de barcos
 	}
 	this.casillasLibres=function(x,y,tam){
 		if(x+tam>this.size){
@@ -391,7 +392,11 @@ function Casilla(x,y){
 	this.y=y;
 	this.contiene=new Agua();
 }
+/*function Horizontal(){
+	this.colocarBarco=function(barco, tablero,x,y){
 
+	}
+}*/
 function Barco(nombre,tam){ //"b2" barco tamaño 2
 	this.nombre=nombre;
 	this.tam=tam;
@@ -415,12 +420,30 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
 		tablero.ponerAgua(x,y);
 		return this.estado;
 	}
+	/*this.meDisparan = function (tablero, x, y) {
+        //this.disparos++;
+        //if (this.casillas[x] == 'intacto') { //Cambiado, puede no ser necesario este if
+            this.estado = "tocado";
+            this.casillas[x] = 'tocado'
+			console.log("Tocado")
+        //}
+        if (this.comprobarCasillas()) {
+            this.estado = "hundido";
+			console.log("Hundido")
+        }
+        //tablero.ponerAgua(x, y);
+        return this.estado;
+    }*/
 	this.obtenerEstado=function(){
 		return this.estado;
 	}
 	this.esAgua=function(){
 		return false;
 	}
+	/*this.colocar=function(tablero,x,y){
+		
+	}
+	*/
 }
 
 function Agua(){

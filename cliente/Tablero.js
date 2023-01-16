@@ -167,9 +167,11 @@ function Tablero(size){
 		$('#gc').remove();
 		let cadena='<div class="game-container" id="gc">';
 		cadena=cadena+'<div id="roster-sidebar">';
-	 	cadena=cadena+'<h2>Barcos</h2><div id="flota"></div></div><div class="grid-container"><h2>Tu flota</h2>';
+	 	cadena=cadena+'<h2 style="color:#222222">Barcos</h2><div id="flota"></div></div>';
+		cadena=cadena+'<div class="row">';
+	 	cadena=cadena+'<div class="grid-container"><h2>Tu flota</h2>';
 		cadena=cadena+'<div class="grid human-player"></div></div><div class="grid-container">';
-		cadena=cadena+'<h2>Flota enemiga</h2><div class="grid computer-player"></div></div></div>';
+		cadena=cadena+'<h2>Flota enemiga</h2><div class="grid computer-player"></div></div></div></div>';
 		$('#ancla').append(cadena);
 		this.createGrid();
 	}
