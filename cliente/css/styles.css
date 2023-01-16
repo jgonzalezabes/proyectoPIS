@@ -276,7 +276,7 @@ div {
 			cursor: url('../img/crosshair.png') 16 16, crosshair;
 		}
 	.grid-ship, .human-player .grid-ship:hover {
-		background-color: #808080;
+		background-color: #1b04b2;
 	}
 	.grid-agua, .grid-agua:hover, .human-player .grid-agua:hover {
 		background-color: #FFFFFF;
