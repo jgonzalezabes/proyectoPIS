@@ -165,6 +165,9 @@ function Usuario(nick,juego){
 		}
 		return false;
 	}
+	this.comprobarLimites = function (tam, x) {
+		return this.tableroPropio.comprobarLimites(tam, x)
+	}
 	this.todosDesplegados=function(){
 		for(var key in this.flota){
 			if (!this.flota[key].desplegado){
@@ -209,6 +212,18 @@ function Usuario(nick,juego){
 		}
 		return true;
 	}
+	this.obtenerBarcoDesplegado = function (nombre, x) {
+        for (let key in this.flota) {
+            if (this.flota[key].nombre == nombre) {
+                if (this.comprobarLimites(this.flota[key].tam, x)) {
+                    return this.flota[key];
+                } else {
+                    return false
+                }
+            }
+        }
+        return undefined
+    }
 	this.insertarLog=function(logs, callback){
 		this.juego.insertarLog(logs, callback);
 	}
@@ -345,14 +360,21 @@ function Tablero(size){
 		}
 	}
 	this.colocarBarco=function(barco,x,y){
-		if (this.casillasLibres(x,y,barco.tam)){
-			for(i=x;i<x+barco.tam;i++){
-				this.casillas[i][y].contiene=barco;
-			}
-			barco.desplegado=true;
-			return true;
-		}
-		return false;
+		//if (this.casillasLibres(x,y,barco.tam)){
+		//	for(i=x;i<x+barco.tam;i++){
+		//		this.casillas[i][y].contiene=barco;
+		//	}
+		//	barco.desplegado=true;
+		//	return true;
+		//}
+		//return false;
+		barco.colocar(this,x,y);
+	}
+	this.comprobarLimites = function (tam, x) {
+		if (x + tam > this.size) {
+			console.log('excede los limites')
+			return false
+		} else { return true }
 	}
 	this.casillasLibres=function(x,y,tam){
 		if(x+tam>this.size){
@@ -402,7 +424,7 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
 	this.esAgua=function(){
 		return false;
 	}
-	this.meDisparan=function(tablero,x,y){
+	/*this.meDisparan=function(tablero,x,y){
 		this.disparos++;
 		if (this.disparos<this.tam){
 			this.estado="tocado";
@@ -414,12 +436,70 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
 		}
 		tablero.ponerAgua(x,y);
 		return this.estado;
+	}*/
+	this.meDisparan = function (tablero, x, y) {
+        //this.disparos++;
+        //if (this.casillas[x] == 'intacto') { //Cambiado, puede no ser necesario este if
+            this.estado = "tocado";
+            this.casillas[x] = 'tocado'
+			console.log("Tocado")
+        //}
+        if (this.comprobarCasillas()) {
+            this.estado = "hundido";
+			console.log("Hundido")
+        }
+        //tablero.ponerAgua(x, y);
+        return this.estado;
+    }
+    this.posicion = function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.desplegado = true;
+		this.iniCasillas()
+		//console.log(this)
+    }
+    this.colocar = function(tablero,x,y){
+		//console.log(this,tablero,x,y)
+		this.orientacion.colocarBarco(this,tablero,x,y);
 	}
 	this.obtenerEstado=function(){
 		return this.estado;
 	}
+	this.comprobarCasillas = function () { //Esto puede dejar de funcionar si tenemos formas raras de los barcos
+        for (i = 0; i < this.tam; i++) {
+            if (this.casillas[this.x + i] == 'intacto') {
+                return false;
+            }
+        }
+        return true;
+    }
+    this.iniCasillas = function () {
+        for (i = 0; i < this.tam; i++) {
+            this.casillas[i+this.x] = "intacto"; 
+        }
+    }
 	this.esAgua=function(){
 		return false;
+	}
+}
+
+function Horizontal() {
+	this.nombre="horizontal"
+    this.colocarBarco = function (barco, tablero, x, y){
+        if (tablero.comprobarLimites(barco.tam, x)) {
+            if (tablero.casillasLibres(x, y, barco.tam)) {
+				//console.log(x,y,barco.tam)
+                    for (let i = x; i < barco.tam + x; i++) {	
+                        tablero.casillas[i][y].contiene = barco;
+                        console.log('Barco', barco.nombre, 'colocado en', i, y)
+                    }
+                barco.posicion(x, y);
+				console.log(barco)
+            }
+        }
+    }
+	this.esHorizontal = function(){
+		return true;
 	}
 }
 
@@ -431,7 +511,7 @@ function Agua(){
 	}
 	this.meDisparan=function(tablero,x,y){
 		console.log("agua");
-		return this.estado;
+		return this.obtenerEstado();
 	}
 	this.obtenerEstado=function(){
 		return this.estado;
