@@ -148,11 +148,11 @@ function Usuario(nick,juego){
 	this.inicializarFlota=function(){
 		// this.flota.push(new Barco("b2",2));
 		// this.flota.push(new Barco("b4",4));
-		this.flota["b2"]=new Barco("b2",2);
-		this.flota["b4"]=new Barco("b4",4);
-		this.flota["b9"]=new Barco("b9",9);
-		this.flota["b5"]=new Barco("b5",5);
-		this.flota["b1"]=new Barco("b1",1);
+		this.flota["b2"]=new Barco("b2",2,new Horizontal());
+		this.flota["b4"]=new Barco("b4",4,new Horizontal());
+		this.flota["b9"]=new Barco("b9",9,new Horizontal());
+		this.flota["b5"]=new Barco("b5",5,new Horizontal());
+		this.flota["b1"]=new Barco("b1",1,new Horizontal());
 		// otros barcos: 1, 3, 5,...
 	}
 	this.colocarBarco=function(nombre,x,y){
@@ -368,7 +368,7 @@ function Tablero(size){
 		//	return true;
 		//}
 		//return false;
-		barco.colocar(this,x,y);
+		return barco.colocar(this,x,y);
 	}
 	this.comprobarLimites = function (tam, x) {
 		if (x + tam > this.size) {
@@ -377,10 +377,6 @@ function Tablero(size){
 		} else { return true }
 	}
 	this.casillasLibres=function(x,y,tam){
-		if(x+tam>this.size){
-			console.log("el barco se sale del tablero");
-			return false;
-		}
 		for(i=x;i<x+tam;i++){
 			let contiene=this.casillas[i][y].contiene;
 			if (!contiene.esAgua()){
@@ -414,13 +410,14 @@ function Casilla(x,y){
 	this.contiene=new Agua();
 }
 
-function Barco(nombre,tam){ //"b2" barco tamaño 2
+function Barco(nombre,tam,ori){ //"b2" barco tamaño 2
 	this.nombre=nombre;
 	this.tam=tam;
-	this.orientacion; //horizontal, vertical...
+	this.orientacion=ori; //horizontal, vertical...
 	this.desplegado=false;
 	this.estado="intacto";
 	this.disparos=0;
+	this.casillas = {};
 	this.esAgua=function(){
 		return false;
 	}
@@ -460,7 +457,7 @@ function Barco(nombre,tam){ //"b2" barco tamaño 2
     }
     this.colocar = function(tablero,x,y){
 		//console.log(this,tablero,x,y)
-		this.orientacion.colocarBarco(this,tablero,x,y);
+		return this.orientacion.colocarBarco(this,tablero,x,y);
 	}
 	this.obtenerEstado=function(){
 		return this.estado;
@@ -494,9 +491,11 @@ function Horizontal() {
                         console.log('Barco', barco.nombre, 'colocado en', i, y)
                     }
                 barco.posicion(x, y);
-				console.log(barco)
+				console.log(barco);
+				return true;
             }
         }
+        return false;
     }
 	this.esHorizontal = function(){
 		return true;
