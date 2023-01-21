@@ -34,8 +34,10 @@ function ServidorWS(){
 		  socket.on("unirseAPartida",function(nick, codigo){
 		  	let res = juego.jugadorSeUneAPartida(nick, codigo);
 		  	let codigoStr=codigo.toString(); //en crearPartida sería let codigoStr=res.codigo.toString();
-			socket.join(codigoStr);
-			cli.enviarAlRemitente(socket,"unionAPartida", res);
+				socket.join(codigoStr);
+				let lista=juego.obtenerPartidasDisponibles();
+      	cli.enviarATodos(socket,"actualizarListaPartidas",lista); 
+				cli.enviarAlRemitente(socket,"unionAPartida", res);
 		  	//comprobar que la partida puede comenzar (fase jugando de la partida)
 		  	let partida=juego.obtenerPartida(codigo);
 		  	//cli.enviarATodosEnPartida(io,codigo,"aColocar",{});
@@ -43,7 +45,7 @@ function ServidorWS(){
                   let us =juego.obtenerUsuario(nick);
                   let flota=us.obtenerFlota();
                   let res={};
-                  res.flota=flota;      
+                  res.flota=flota; 
                   cli.enviarATodosEnPartida(io,codigoStr,"faseDesplegando",res);
               }
 		  });
@@ -95,7 +97,6 @@ function ServidorWS(){
 		  	let us = juego.obtenerUsuario(nick);
 		  	if(us && us.partida.turno == us && us.partida.esJugando()){
 		  		let codigoStr=us.partida.codigo.toString();
-		  		//let rival = us.partida.obtenerRival(nick);
 
 	  			us.disparar(x,y);
 	  			let impacto=us.obtenerEstadoMarcado(x,y);
@@ -104,8 +105,10 @@ function ServidorWS(){
 	  				let res={"turno":us.partida.turno.nick};
 	  				cli.enviarATodosEnPartida(io,codigoStr,"finPartida",res);
 	  			}else{
+	  				let res={"turno":us.partida.turno.nick};
 	  				let data={"x":x,"y":y,"impacto":impacto,"turno":us.partida.turno.nick,"atacante":us.nick}
 	  				cli.enviarATodosEnPartida(io,codigoStr,"disparo",data);
+	  				cli.enviarATodosEnPartida(io,codigoStr,"turnoUsuario",res);
 	  			}
 	  		}else{
 	  			cli.enviarAlRemitente(socket,"turnoIncorrecto",{});

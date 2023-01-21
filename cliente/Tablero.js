@@ -166,6 +166,7 @@ function Tablero(size){
 	this.elementosGrid=function(){
 		$('#gc').remove();
 		let cadena='<div class="game-container" id="gc">';
+		cadena=cadena+'<div id="mTurno"></div>';
 		cadena=cadena+'<div id="roster-sidebar">';
 	 	cadena=cadena+'<h2 style="color:#222222">Barcos</h2><div id="flota"></div></div>';
 		cadena=cadena+'<div class="row">';

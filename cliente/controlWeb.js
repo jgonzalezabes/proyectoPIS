@@ -85,41 +85,19 @@ function ControlWeb(){
 			iu.comprobarCookie();
 		});
 	}
-	/*this.mostrarCrearPartida=function(){
-		$('#mCP').remove();
-		let cadena= '<div class="row" id="mCP">';//'<form class="form-row needs-validation"  id="mAJ">';
-        cadena=cadena+'<div class="col">';
-        cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear partida</button>';
-        cadena=cadena+'</div>';
-        cadena=cadena+'</div>';
-        $('#crearPartida').append(cadena);
-        $("#btnCP").on("click",function(e){		
-			$("#mCP").remove();
-			$('#mLP').remove();
-			cws.crearPartida(); //Aquí empieza el ciclo de los web Sockets. Se llama a clienteWS
-		});
-	}*/
 	this.mostrarCrearPartida=function(){
 		$('#mCP').remove();
-		// let cadena= '<div class="row" id="mCP">';
-  //       cadena=cadena+'<div class="col">';
-  //       cadena=cadena+'<button id="btnCP" class="btn btn-primary mb-2 mr-sm-2">Crear partida</button>';
-  //       cadena=cadena+'</div>';
-  //       cadena=cadena+'</div>';
+    let cadena='<div class="card" id="mCP">';
+  	cadena=cadena+'<div class="card-body">'
+    cadena=cadena+'<h4 style="color: #222222" class="card-title">Crear partida</h4>';
+    cadena=cadena+'<p style="color: #222222" class="card-text">Crea una nueva partida y espera rival.</p>'; 
+    cadena=cadena+'<button id="btnCP" class="btn mb-2 mr-sm-2">Crear partida</button>';
+  	cadena=cadena+'</div>';
 
-        let cadena='<div class="card" id="mCP">';
-	  	cadena=cadena+'<div class="card-body">'
-	    cadena=cadena+'<h4 style="color: #222222" class="card-title">Crear partida</h4>';
-	    cadena=cadena+'<p style="color: #222222" class="card-text">Crea una nueva partida y espera rival.</p>';
-	    //cadena=cadena+'<a href="#" class="card-link">Card link</a>'	    
-	    cadena=cadena+'<button id="btnCP" class="btn mb-2 mr-sm-2">Crear partida</button>';
-	  	cadena=cadena+'</div>';
-
-        $('#crearPartida').append(cadena);
-        $("#btnCP").on("click",function(e){		
+    $('#crearPartida').append(cadena);
+    $("#btnCP").on("click",function(e){
 			$("#mCP").remove();
 			$('#mLP').remove();
-			//rest.crearPartida();
 			cws.crearPartida();
 		});
 	}
@@ -147,16 +125,30 @@ function ControlWeb(){
 
 		$(".list-group a").click(function(){
 	        codigo=$(this).attr("value");
-   	        console.log(codigo);
+   	       console.log(codigo);
 	        if (codigo){
 	            $('#mLP').remove();
 	            $('#mCP').remove();
 	            cws.unirseAPartida(codigo);
 	        }
 	    });		
-	    $("#btnAL").on("click",function(e){		
+	  $("#btnAL").on("click",function(e){		
 			rest.obtenerListaPartidasDisponibles();
 		})
+	}
+	this.mostrarTurno=function(data){
+		$('#mT').remove();
+		if(data.turno != data.nick){
+			let cadena='<form class="turno-form w-75 mx-auto">';
+      cadena=cadena+'<h4 id="mT" style="color: #9d0101">Turno del contrincante</h4>';
+      cadena=cadena+'</form>';
+			$('#mTurno').append(cadena);
+		}else{
+			let cadena='<form class="turno-form">';
+			cadena=cadena+'<h4 id="mT" style="color: #1ac600">Te toca disparar</h4>';
+			cadena=cadena+'</form>';
+			$('#mTurno').append(cadena);
+		}
 	}
 	this.mostrarModal=function(msg){
 		$('#mM').remove();

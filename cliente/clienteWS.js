@@ -48,7 +48,7 @@ function ClienteWS(){
 
 		this.socket.on("unionAPartida", function(data){
 			if (data.codigo!= -1){
-				console.log("Usuario "+cli.nick+" se une a partida codigo: "+data.codigo);
+				console.log("Usuario "+rest.nick+" se une a partida codigo: "+data.codigo);
 				iu.mostrarAbandonarPartida();
 				cli.codigo=data.codigo;
 			}
@@ -65,7 +65,9 @@ function ClienteWS(){
 			iu.mostrarModal("Coloque sus barcos!");
 		});
 		this.socket.on("aJugar",function(res){
-			iu.mostrarModal("A jugaar! Turno de "+ res.turno);
+			iu.mostrarModal("Que comience la batalla!! Turno de "+ res.turno);
+			let data={"turno":res.turno, "nick":rest.nick};
+			iu.mostrarTurno(data);
 		});
 		this.socket.on("barcoColocado",function(res){
 			console.log("Barco "+res.nombre+" colocado?: "+res.colocado);
@@ -100,10 +102,15 @@ function ClienteWS(){
 				tablero.updateCell(res.x,res.y,res.impacto,'human-player');	
 			}
 		});
+		this.socket.on("turnoUsuario",function(res){
+			let data={"turno":res.turno, "nick":rest.nick};
+			iu.mostrarTurno(data);
+		});
 		this.socket.on("turnoIncorrecto",function(){
 			console.log("Espere su turno");
+			iu.mostrarModal("Todavía no es su turno");
 		});
-		this.socket.on("finPartida",function(res){//antes ponia res.turno
+		this.socket.on("finPartida",function(res){
 			console.log("Fin de la partida");
 			console.log("Ganador: "+res.turno);
 			iu.mostrarModal("Fin de la partida. Ganador: "+res.turno);

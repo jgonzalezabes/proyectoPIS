@@ -110,6 +110,13 @@ div {
 
 .modal-title {color:#222222;}
 
+.turno-form {
+    border-radius: 24px;
+    background: #ffffff;
+    text-align: center;
+    border-color: #222222;
+}
+
 	#start-game,
 	#place-randomly,
 	#restart-game {
