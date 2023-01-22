@@ -148,9 +148,9 @@ function Usuario(nick,juego){
 	this.inicializarFlota=function(){
 		this.flota["b2"]=new Barco("b2",2,new Horizontal());
 		this.flota["b4"]=new Barco("b4",4,new Horizontal());
-		//this.flota["b9"]=new Barco("b9",9,new Horizontal());
-		//this.flota["b5"]=new Barco("b5",5,new Horizontal());
-		//this.flota["b1"]=new Barco("b1",1,new Horizontal());
+		this.flota["b9"]=new Barco("b9",9,new Horizontal());
+		this.flota["b5"]=new Barco("b5",5,new Horizontal());
+		this.flota["b1"]=new Barco("b1",1,new Horizontal());
 	}
 	this.colocarBarco=function(nombre,x,y){
 		//comprobar fase

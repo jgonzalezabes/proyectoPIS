@@ -33,7 +33,7 @@ function ServidorWS(){
 
 		  socket.on("unirseAPartida",function(nick, codigo){
 		  	let partida=juego.obtenerPartida(codigo);
-		  	if(partida && partida.fase=="inicial"){
+		  	if(partida && partida.fase=="inicial" && partida.owner.nick!=nick){
 			  	let res = juego.jugadorSeUneAPartida(nick, codigo);
 			  	let codigoStr=codigo.toString();
 					socket.join(codigoStr);
