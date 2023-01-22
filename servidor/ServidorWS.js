@@ -24,30 +24,33 @@ function ServidorWS(){
 
 		  socket.on("crearPartida",function(nick){
 		  	let res = juego.jugadorCreaPartida(nick);
-		  	let codigoStr=res.codigo.toString(); //en crearPartida sería let codigoStr=res.codigo.toString();
-			socket.join(codigoStr);
+		  	let codigoStr=res.codigo.toString();
+				socket.join(codigoStr);
 		  	cli.enviarAlRemitente(socket,"partidaCreada", res);
 		  	let lista=juego.obtenerPartidasDisponibles();
 		  	cli.enviarATodos(socket,"actualizarListaPartidas",lista);
 		  });
 
 		  socket.on("unirseAPartida",function(nick, codigo){
-		  	let res = juego.jugadorSeUneAPartida(nick, codigo);
-		  	let codigoStr=codigo.toString(); //en crearPartida sería let codigoStr=res.codigo.toString();
-				socket.join(codigoStr);
-				let lista=juego.obtenerPartidasDisponibles();
-      	cli.enviarATodos(socket,"actualizarListaPartidas",lista); 
-				cli.enviarAlRemitente(socket,"unionAPartida", res);
-		  	//comprobar que la partida puede comenzar (fase jugando de la partida)
 		  	let partida=juego.obtenerPartida(codigo);
-		  	//cli.enviarATodosEnPartida(io,codigo,"aColocar",{});
-              if (partida.esDesplegando()){
-                  let us =juego.obtenerUsuario(nick);
-                  let flota=us.obtenerFlota();
-                  let res={};
-                  res.flota=flota; 
-                  cli.enviarATodosEnPartida(io,codigoStr,"faseDesplegando",res);
-              }
+		  	if(partida && partida.fase=="inicial"){
+			  	let res = juego.jugadorSeUneAPartida(nick, codigo);
+			  	let codigoStr=codigo.toString();
+					socket.join(codigoStr);
+					let lista=juego.obtenerPartidasDisponibles();
+		    	cli.enviarATodos(socket,"actualizarListaPartidas",lista); 
+					cli.enviarAlRemitente(socket,"unionAPartida", res);
+					let partida=juego.obtenerPartida(codigo);
+          if (partida.esDesplegando()){
+              let us =juego.obtenerUsuario(nick);
+              let flota=us.obtenerFlota();
+              let res={};
+              res.flota=flota; 
+              cli.enviarATodosEnPartida(io,codigoStr,"faseDesplegando",res);
+          }
+		    }else{
+		    	cli.enviarAlRemitente(socket,"partidaNoEncontrada", {});
+		    }
 		  });
 		  socket.on("abandonarPartida",function(nick, codigo){ 
 		  	let usr =juego.obtenerUsuario(nick)

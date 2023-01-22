@@ -39,7 +39,7 @@ function ClienteWS(){
 			console.log(data);
 			if (data.codigo!= -1){
 				console.log("Usuario "+rest.nick+" crea partida codigo: "+data.codigo)
-				iu.mostrarAbandonarPartida();
+				iu.mostrarAbandonarPartida(data.codigo);
 				cli.codigo=data.codigo;
 			}
 			else{
@@ -49,12 +49,16 @@ function ClienteWS(){
 		this.socket.on("unionAPartida", function(data){
 			if (data.codigo!= -1){
 				console.log("Usuario "+rest.nick+" se une a partida codigo: "+data.codigo);
-				iu.mostrarAbandonarPartida();
+				iu.mostrarAbandonarPartida(data.codigo);
 				cli.codigo=data.codigo;
 			}
 			else{
 				console.log("No se ha podido unir a partida")
 			}
+		});
+		this.socket.on("partidaNoEncontrada",function(){
+			iu.mostrarHome();
+			iu.mostrarModal("No se ha podido unir a partida");
 		});
 		this.socket.on("actualizarListaPartidas",function(lista){
 			if (!cli.codigo){
@@ -83,9 +87,8 @@ function ClienteWS(){
 		});
 		this.socket.on("faseDesplegando",function(data){
 			tablero.flota=data.flota;
-			//tablero.mostrar(true);
 			tablero.elementosGrid();
-			tablero.mostrarFlota();//data.flota);
+			tablero.mostrarFlota();
 			console.log("Ya puedes desplegar la flota");
 		});
 		this.socket.on("jugadorAbandona",function(data){

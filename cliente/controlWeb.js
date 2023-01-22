@@ -66,16 +66,18 @@ function ControlWeb(){
 		$('#mInv').remove();
 		let cadena="<div class='row' id='mH'>";
 		cadena=cadena+'<div class="col">';
-		cadena=cadena+"<h4>Bienvenido "+rest.nick+". Seleccione que le gustaría hacer</h4>";
+		cadena=cadena+"<h4>Bienvenido "+rest.nick+".</h4>";
 		cadena=cadena+'<button style="background-color: #dd1b09" id="btnSalir" class="btn mb-2 mr-sm-2">Cerrar Sesión</button>';
 		cadena=cadena+"<div id='codigo'></div>";
 		cadena=cadena+"</div></div>";
 		$('#agregarUsuario').append(cadena);
 		this.mostrarCrearPartida();
+		this.mostrarBuscarPartida();
 		rest.obtenerListaPartidasDisponibles();
 		$("#btnSalir").on("click",function(e){		
 			$("#mCP").remove();
 			$('#mLP').remove();
+			$('#mBP').remove();
 			$('#mH').remove();
 			cws.salir();
 			rest.usuarioSale();
@@ -97,17 +99,38 @@ function ControlWeb(){
     $('#crearPartida').append(cadena);
     $("#btnCP").on("click",function(e){
 			$("#mCP").remove();
+			$('#mBP').remove();
 			$('#mLP').remove();
 			cws.crearPartida();
 		});
 	}
-	this.mostrarAbandonarPartida=function(){
-		let cadena='<button id="btnAP" class="btn mb-2 mr-sm-2">Abandonar partida</button>';
-		cadena=cadena+"</div>";
+	this.mostrarAbandonarPartida=function(codigo){
+		let cadena="<h4>Código de la partida: "+codigo+"</h4>";
+		cadena=cadena +'<button id="btnAP" class="btn mb-2 mr-sm-2">Abandonar partida</button>';
+
 		$('#codigo').append(cadena);
 		$('#btnAP').on("click",function(e){
 			cws.abandonarPartida();
 		});
+	}
+	this.mostrarBuscarPartida=function(){
+		$('#mBP').remove();
+		let cadena='<div class="row col-8 " id="mBP"><input type="text" id="codigoPartida" placeholder="Código de Partida" required/>';
+		cadena=cadena+'<button id="btnBP" class="btn mb-2 mr-sm-2">Buscar partida</button></div>';
+
+		$('#buscarPartida').append(cadena);
+		$("#btnBP").on("click",function(e){
+			if ($('#codigoPartida').val() === '') {
+			  e.preventDefault();
+			}
+			else{
+				var codP=$('#codigoPartida').val();
+				$("#mCP").remove();
+				$('#mBP').remove();
+				$('#mLP').remove();
+				cws.unirseAPartida(codP);
+			}
+		})
 	}
 	this.mostrarListaDePartidasDisponibles=function(lista){
 		$('#mLP').remove();
@@ -125,11 +148,12 @@ function ControlWeb(){
 
 		$(".list-group a").click(function(){
 	        codigo=$(this).attr("value");
-   	       console.log(codigo);
+   	      console.log(codigo);
 	        if (codigo){
 	            $('#mLP').remove();
 	            $('#mCP').remove();
-	            cws.unirseAPartida(codigo);
+							$('#mBP').remove();
+							cws.unirseAPartida(codigo);
 	        }
 	    });		
 	  $("#btnAL").on("click",function(e){		
@@ -160,7 +184,6 @@ function ControlWeb(){
 		$('#gc').remove();
 		cws.codigo=undefined;
 		tablero=new Tablero(10);
-		//tablero.mostrar(false);
 		iu.mostrarHome();
 	}
 }

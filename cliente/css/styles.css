@@ -116,6 +116,14 @@ div {
     text-align: center;
     border-color: #222222;
 }
+#codigoPartida {
+    height: 40px;
+    border-radius: 8px;
+    border:2px solid #dad9d9;
+    background: #ffffff;
+    border-color: #222222;
+	margin: 1em auto 0 auto;
+}
 
 	#start-game,
 	#place-randomly,
